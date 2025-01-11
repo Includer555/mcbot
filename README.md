@@ -1,4 +1,4 @@
-# USES Mineflayer
+# Uses Mineflayer
 Mineflayer: <a href="https://github.com/PrismarineJS/mineflayer">here</a>
 
 # Nagyon meno
