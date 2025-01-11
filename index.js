@@ -112,7 +112,7 @@ function WanderOff(){
 //Wandering botmode (Select a random position and goes to it)
 async function Wandering() {
 
-    if (!bot.pathfinder.isMoving() && bot.pathfinder. && !bot.pvp.target) {
+    if (!bot.pathfinder.isMoving() && !bot.pvp.target) {
         //Getting Random positions in the world
         const RandPosX = randomNumber(-500, 500);
         const PosY = 70;
