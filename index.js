@@ -28,10 +28,12 @@ bot.loadPlugin(pvp);
 //Initialized pathfinder and mcdata variable
 bot.once("spawn", () => {
     const defaultMove = new Movements(bot);
+
     defaultMove.canOpenDoors = true;
     defaultMove.allowParkour = true;
     defaultMove.allow1by1towers = false;
     defaultMove.allowEntityDetection = true;
+
     bot.pathfinder.setMovements(defaultMove);
     mcData = require("minecraft-data")(bot.version);
 });
@@ -47,7 +49,7 @@ bot.on("health", async() => {
                 await bot.equip(goldenApple, 'hand');
                 await bot.consume();
             }catch {
-
+                console.log(err);
             }
         }
     }
@@ -101,7 +103,7 @@ function KillerModeOn() {
     }
 }
 
-//Set bot killermodebot mode off;
+//Set bot killermodemob mode off;
 function KillerModeOffMob() {
     killerModeMob = false;
 }
@@ -119,7 +121,7 @@ function KillerModeOnMob() {
 
 //Set bot killermode mode off
 function KillerModeOff() {
-    killerModeMob = false;
+    killerMode = false;
     if (bot.pvp.target)
     {
         bot.pvp.stop();
@@ -141,8 +143,17 @@ function findSword() {
 }
 
 //Killermode and ai behaviour
-bot.on('physicsTick', async() => {
-    if (killerMode && bot.health > 12) {
+bot.on('physicsTick', () => {
+    if (killerModeMob)
+        KillermodeMob();
+    if (killerMode)
+        Killermode();
+});
+
+//Killermode function
+async function Killermode()
+{
+    if (bot.health > 12) {
         const enemy = bot.nearestEntity(e => e.type === "player" && e.mobType !== 'Armor Stand');
 
         if (enemy) {
@@ -150,7 +161,7 @@ bot.on('physicsTick', async() => {
                 try {
                     await bot.pvp.attack(enemy);
                 }catch(err) {
-                    
+                    console.log(err);
                 }
             }
         }
@@ -163,7 +174,33 @@ bot.on('physicsTick', async() => {
     }else {
         await bot.pvp.stop();
     }
-});
+}
+
+async function KillermodeMob()
+{
+    if (killerModeMob && bot.health > 12) {
+        const filter = e => e.type === "hostile" && e.mobType !== 'Armor Stand' && bot.entity.position.distanceTo(e.position) < 16;
+        const enemy = bot.nearestEntity(filter);
+
+        if (enemy) {
+            if (!bot.pvp.target) {
+                try {
+                    await bot.pvp.attack(enemy);
+                }catch(err) {
+                    console.log(err);
+                }
+            }
+        }
+
+        const sword = findSword();
+
+        if (sword && bot.health > 12) {
+            await bot.equip(sword, 'hand');
+        }
+    }else {
+        await bot.pvp.stop();
+    }
+}
 
 //Gets the player position and send it to you
 function kiholplr(username) {
@@ -175,7 +212,7 @@ function kiholplr(username) {
             bot.chat("/w Konyhas_Him " + entity.entity.position + " name: " + entity.displayName.toString());
         }
     }catch(err) {
-
+        console.log(err);
     }
 }
 
