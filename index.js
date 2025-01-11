@@ -11,6 +11,7 @@ let mcData;
 //Bot modes
 let killerMode = false;
 let killerModeMob = false;
+let isWandering = false;
 
 //Initialize bot
 let bot = mineflayer.createBot({
@@ -41,14 +42,14 @@ bot.once("spawn", () => {
 //Bot eating when hp low
 bot.on("health", async() => {
     if (bot.health < 12) {
-        const goldenApple = findGoldenApple();
+        const goldenApple = findFood();
 
         if (goldenApple) {
             try {
                 await bot.pvp.stop();
                 await bot.equip(goldenApple, 'hand');
                 await bot.consume();
-            }catch {
+            }catch (err) {
                 console.log(err);
             }
         }
@@ -85,11 +86,51 @@ bot.on("whisper", (username, message) => {
     if (args[0] === "killermodemoboff") {
         KillerModeOffMob();
     }
+
+    if (args[0] === "wanderon") {
+        WanderOn();
+    }
+
+    if (args[0] === "wanderoff") {
+        WanderOff();
+    }
 })
 
+//RandomValue Generator
+function randomNumber(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+function WanderOn(){
+    isWandering = true;
+}
+
+function WanderOff(){
+    isWandering = false;
+}
+
+//Wandering botmode (Select a random position and goes to it)
+async function Wandering() {
+
+    if (!bot.pathfinder.isMoving() && bot.pathfinder. && !bot.pvp.target) {
+        //Getting Random positions in the world
+        const RandPosX = randomNumber(-500, 500);
+        const PosY = 70;
+        const RandPosZ = randomNumber(-500, 500);
+
+        try {
+            await bot.pathfinder.setGoal(new GoalNear(RandPosX, PosY, RandPosZ));
+        }catch (err){
+            console.log(err);
+        }
+    }else if(!bot.pvp.target) {
+        bot.pathfinder.stop();
+    }
+}
+
 //Get Golden Apple
-function findGoldenApple() {
-    return bot.inventory.items().find(item => item.name === 'golden_apple');
+function findFood() {
+    return bot.inventory.items().find(item => item.name.includes("cooked") || item.name.includes("apple"));
 }
 
 //Set bot mode into killing players
@@ -148,6 +189,8 @@ bot.on('physicsTick', () => {
         KillermodeMob();
     if (killerMode)
         Killermode();
+    if (isWandering)
+        Wandering();
 });
 
 //Killermode function
