@@ -1,0 +1,15 @@
+body{
+    background-color: black;
+    text-align: center;
+    font-size: 32pt;
+}
+
+.container{
+    position: absolute;
+    top: 5%;
+    bottom: 5%;
+    left: 25%;
+    right: 25%;
+    background-color: grey;
+    border-radius: 5px;
+}
