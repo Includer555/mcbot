@@ -187,3 +187,4 @@ function attack(username) {
         bot.pvp.attack(enemy.entity);
     }
 }
+//
