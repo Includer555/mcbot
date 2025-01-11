@@ -1,3 +1,4 @@
+//Mienflayer variable things
 const mineflayer = require("mineflayer");
 const pvp = require("mineflayer-pvp").plugin;
 const pathfinder = require('mineflayer-pathfinder').pathfinder
@@ -7,24 +8,24 @@ const armorManager = require("mineflayer-armor-manager");
 const toolPlugin = require('mineflayer-tool').plugin
 let mcData;
 
+//Bot modes
 let killerMode = false;
 let killerModeMob = false;
 
+//Initialize bot
 let bot = mineflayer.createBot({
     username: "NAV-Merkur2",
     host: "kaka-tKz1.aternos.me",
     port: 21696
 });
 
+//Load bot plugins
 bot.loadPlugin(toolPlugin);
 bot.loadPlugin(armorManager);
 bot.loadPlugin(pathfinder);
 bot.loadPlugin(pvp);
 
-function findGoldenApple() {
-    return bot.inventory.items().find(item => item.name === 'golden_apple');
-}
-
+//Initialized pathfinder and mcdata variable
 bot.once("spawn", () => {
     const defaultMove = new Movements(bot);
     defaultMove.canOpenDoors = true;
@@ -32,9 +33,10 @@ bot.once("spawn", () => {
     defaultMove.allow1by1towers = false;
     defaultMove.allowEntityDetection = true;
     bot.pathfinder.setMovements(defaultMove);
-    mcData = mcData = require("minecraft-data")(bot.version);
+    mcData = require("minecraft-data")(bot.version);
 });
 
+//Bot eating when hp low
 bot.on("health", async() => {
     if (bot.health < 12) {
         const goldenApple = findGoldenApple();
@@ -51,7 +53,9 @@ bot.on("health", async() => {
     }
 })
 
+//bot whisper commands
 bot.on("whisper", (username, message) => {
+    //Splits the message
     let args = message.split(" ");
 
     bot.chat("/w Levi555"+args[1])
@@ -81,6 +85,12 @@ bot.on("whisper", (username, message) => {
     }
 })
 
+//Get Golden Apple
+function findGoldenApple() {
+    return bot.inventory.items().find(item => item.name === 'golden_apple');
+}
+
+//Set bot mode into killing players
 function KillerModeOn() {
     const sword = findSword();
 
@@ -91,10 +101,12 @@ function KillerModeOn() {
     }
 }
 
+//Set bot killermodebot mode off;
 function KillerModeOffMob() {
-    killerMode = false;
+    killerModeMob = false;
 }
 
+//Set bot killermodebot mode on;
 function KillerModeOnMob() {
     const sword = findSword();
 
@@ -105,6 +117,7 @@ function KillerModeOnMob() {
     }
 }
 
+//Set bot killermode mode off
 function KillerModeOff() {
     killerModeMob = false;
     if (bot.pvp.target)
@@ -113,6 +126,7 @@ function KillerModeOff() {
     }
 }
 
+//return a sword item from the inventory
 function findSword() {
     const swordNames = [
         'wooden_sword',
@@ -126,6 +140,7 @@ function findSword() {
     return bot.inventory.items().find(item => swordNames.includes(item.name));
 }
 
+//Killermode and ai behaviour
 bot.on('physicsTick', async() => {
     if (killerMode && bot.health > 12) {
         const enemy = bot.nearestEntity(e => e.type === "player" && e.mobType !== 'Armor Stand');
@@ -150,6 +165,7 @@ bot.on('physicsTick', async() => {
     }
 });
 
+//Gets the player position and send it to you
 function kiholplr(username) {
     try {
         let entity = bot.players[username];
@@ -163,6 +179,7 @@ function kiholplr(username) {
     }
 }
 
+//attack the give player
 function attack(username) {
     let enemy = bot.players[username];
 
