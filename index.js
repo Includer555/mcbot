@@ -50,7 +50,7 @@ bot.on("health", async() => {
         }
     }
 })
-//fasz
+//faszdsa
 bot.on("whisper", (username, message) => {
     let args = message.split(" ");
 
