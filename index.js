@@ -16,8 +16,8 @@ let isWandering = false;
 //Initialize bot
 let bot = mineflayer.createBot({
     username: "NAV-Merkur2",
-    host: "kaka-tKz1.aternos.me",
-    port: 21696
+    host: "localhost",
+    port: 4269
 });
 
 //Load bot plugins
