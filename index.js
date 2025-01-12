@@ -197,7 +197,7 @@ bot.on('physicsTick', () => {
 async function Killermode()
 {
     if (bot.health > 12) {
-        const enemy = bot.nearestEntity(e => e.type === "player" && e.mobType !== 'Armor Stand');
+        const enemy = bot.nearestEntity(e => e.type === "player" && e.displayName !== 'Armor Stand');
 
         if (enemy) {
             if (!bot.pvp.target) {
@@ -222,7 +222,7 @@ async function Killermode()
 async function KillermodeMob()
 {
     if (killerModeMob && bot.health > 12) {
-        const filter = e => e.type === "hostile" && e.mobType !== 'Armor Stand' && bot.entity.position.distanceTo(e.position) < 16;
+        const filter = e => e.type === "hostile" && e.displayName !== 'Armor Stand' && bot.entity.position.distanceTo(e.position) < 16;
         const enemy = bot.nearestEntity(filter);
 
         if (enemy) {
