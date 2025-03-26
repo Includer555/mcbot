@@ -1,4 +1,4 @@
-//Mienflayer variable things
+//Mineflayer variable things
 const mineflayer = require("mineflayer");
 const pvp = require("mineflayer-pvp").plugin;
 const pathfinder = require('mineflayer-pathfinder').pathfinder
@@ -109,7 +109,7 @@ function WanderOff(){
     isWandering = false;
 }
 
-//Wandering botmode (Select a random position and goes to it)
+//Wandering botmode (Selects a random position and goes to it)
 async function Wandering() {
 
     if (!bot.pathfinder.isMoving() && !bot.pvp.target) {
@@ -245,7 +245,7 @@ async function KillermodeMob()
     }
 }
 
-//Gets the player position and send it to you
+//Gets the player position and sends it to you
 function kiholplr(username) {
     try {
         let entity = bot.players[username];
@@ -259,7 +259,7 @@ function kiholplr(username) {
     }
 }
 
-//attack the give player
+//attack the given player
 function attack(username) {
     let enemy = bot.players[username];
 
