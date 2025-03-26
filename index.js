@@ -219,6 +219,8 @@ async function Killermode()
     }
 }
 
+//Levi nem képes kommentelni bazdmeg
+//Nemtom mi ez
 async function KillermodeMob()
 {
     if (killerModeMob && bot.health > 12) {
